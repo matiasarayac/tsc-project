@@ -7,43 +7,58 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('MainCtrl', function($scope,$position, DTOptionsBuilder, $http) {
+  .controller('MainCtrl', function($scope, $position, DTOptionsBuilder, $http, $timeout) {
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
-    .withPaginationType('full_numbers')
-    .withDisplayLength(10)
-
-    $scope.humedad = [];
+      .withPaginationType('full_numbers')
+      .withDisplayLength(10)
+      .withOption('order', [1, 'desc'])
 
     // Humedad
-    $http({
-      method: 'GET',
-      url: 'http://prototype.cparra.me/api/humidities.json'
-    }).then(function successCallback(response) {
-      console.log(response.data);
-      $scope.humedad = response.data;
-      console.log(JSON.stringify($scope.humedad))
-      // this callback will be called asynchronously
-      // when the response is available
-    }, function errorCallback(response) {
-      console.log(response);
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-    });
+    function getHumedad() {
+      $http({
+        method: 'GET',
+        url: 'http://prototype.cparra.me/api/humidities.json'
+      }).then(function successCallback(response) {
+        console.log(response.data);
+        $scope.humedad = response.data;
+          // this callback will be called asynchronously
+          // when the response is available
+      }, function errorCallback(response) {
+        console.log(response);
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
+    }
 
     // Regado
-    $http({
-      method: 'GET',
-      url: 'http://prototype.cparra.me/api/irrigations.json'
-    }).then(function successCallback(response) {      
-      console.log(response.data);
-      $scope.regado = response.data;
-      // this callback will be called asynchronously
-      // when the response is available
-    }, function errorCallback(response) {
-      console.log(response);
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-    });
+    function getRegado() {
+      $http({
+        method: 'GET',
+        url: 'http://prototype.cparra.me/api/irrigations.json'
+      }).then(function successCallback(response) {
+        console.log(response.data);
+        $scope.regado = response.data;
+        // this callback will be called asynchronously
+        // when the response is available
+      }, function errorCallback(response) {
+        console.log(response);
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
+    }
+
+    // Function to replicate setInterval using $timeout service.
+    function intervalFunction() {
+      $timeout(function() {
+        getHumedad();
+        getRegado();
+        intervalFunction();
+      }, 10000) //10s
+    };
+
+    getHumedad();
+    getRegado();
+    intervalFunction();
 
   });
