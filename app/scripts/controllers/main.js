@@ -14,6 +14,8 @@ angular.module('sbAdminApp')
       .withDisplayLength(10)
       .withOption('order', [1, 'desc'])
 
+    $scope.automatic = true;
+
     // Humedad
     function getHumedad() {
       $http({
@@ -51,11 +53,21 @@ angular.module('sbAdminApp')
     // Function to replicate setInterval using $timeout service.
     function intervalFunction() {
       $timeout(function() {
-        getHumedad();
-        getRegado();
+        if($scope.automatic){
+          getHumedad();
+          getRegado();
+        }
         intervalFunction();
       }, 10000) //10s
     };
+
+    $scope.changeAutomatic = function(){
+      if($scope.automatic){
+        $scope.automatic = false;
+      } else {
+        $scope.automatic = true;
+      }
+    }
 
     getHumedad();
     getRegado();

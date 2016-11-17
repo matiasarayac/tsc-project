@@ -2,6 +2,10 @@
   <div class="row">
     <div class="col-lg-12">
       <h1 class="page-header">Dashboard</h1>
+      <button ng-if="!automatic" type="button" class="btn btn-default btn-lg" ng-click="changeAutomatic()">Activar actualización automática</button>
+      <button ng-if="automatic" type="button" class="btn btn-default btn-lg" ng-click="changeAutomatic()">Desactivar actualización automática</button>
+      <br>
+      <br>
     </div>
     <!-- /.col-lg-12 -->
   </div>
