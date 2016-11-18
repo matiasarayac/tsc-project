@@ -12,7 +12,7 @@ angular.module('sbAdminApp')
     $scope.dtOptions = DTOptionsBuilder.newOptions()
       .withPaginationType('full_numbers')
       .withDisplayLength(10)
-      .withOption('order', [1, 'desc'])
+      .withOption('order', [0, 'desc'])
 
     $scope.automatic = true;
 
